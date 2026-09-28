@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at_utc": "2026-09-28T21:03:00Z",
+  "updated_at_utc": "2026-09-28T21:07:13Z",
   "project_repository": "AgentGears/Fifty",
   "external_repository": "AgentGears/Fifty-External",
   "current_gate": "G1",
@@ -18,7 +18,7 @@
   "current_lane": {
     "capability": "CAP-101",
     "title": "Durable Workspace and Principal Identity",
-    "state": "FIRST_PASS_FROZEN",
+    "state": "SECONDARY_REVIEW_IN_PROGRESS",
     "decision": "control/decisions/CAP-101-H1-Decision-v1.0.md",
     "decision_approval_commit": "f4faa703eeec7082f7d4ff07aa74a972c4a73639",
     "branch": "g1/cap-101-workspace-principal",
@@ -31,8 +31,10 @@
     "first_pass": "FROZEN_PASS_NO_OPEN_BLOCKER",
     "first_pass_artifact": "control/reviews/CAP-101-First-Pass-Review-Freeze-v1.0.md",
     "first_pass_artifact_commit": "55f76c7ec2a086e2a0c695e1ec86c781801150a9",
-    "secondary_review_a": "NOT_STARTED",
-    "secondary_review_b": "NOT_STARTED",
+    "secondary_review_a": "IN_PROGRESS",
+    "secondary_review_provider": "gitwire-hq",
+    "secondary_review_check_run": 109136084824,
+    "secondary_review_b": "NOT_REQUIRED_UNLESS_RECONCILIATION_DEMANDS",
     "reconciliation": "NOT_STARTED",
     "unresolved_review_blockers": 0
   },
@@ -44,16 +46,16 @@
   },
   "blockers": [],
   "next_actions": [
-    "Obtain an independent secondary review of exact HEAD 4b0a66ecb4fa1fb151241c4b20b7502725b66210 / tree a7ede2d1c1b5779305ddb92149d87f84a7c90257 without exposing the frozen first-pass findings to that reviewer.",
-    "Reconcile every material secondary-review finding against the frozen first-pass record and independently verify secondary-only claims.",
-    "If source changes result, repeat the affected first-pass freeze on the new exact HEAD/tree before any replacement independent secondary review.",
+    "Allow the independent secondary review to complete on exact HEAD 4b0a66ecb4fa1fb151241c4b20b7502725b66210 without exposing the frozen first-pass findings to that reviewer.",
+    "After the independent review is complete, reconcile every material finding against the frozen first-pass record and independently verify secondary-only claims.",
+    "If source changes result, repeat the affected first-pass freeze on the new exact HEAD/tree before replacement independent secondary review.",
     "After reconciliation, bind the external verifier to the exact reconciled reviewed HEAD/tree, capture required CAP-101 resource measurements, and require fifty/external-verification=success before merge."
   ],
   "interruption_policy": "Interrupt only for Project Authority decisions, unavailable credential/account actions, irreversible consequential actions, semantic conflicts, non-mechanical verification failures, or unauthorized next-slice scope.",
   "notes": [
     "This file is operational continuity metadata, not product authority.",
     "CAP-101 H1 v0.1 was explicitly approved by Project Authority and recorded as CAP-101-H1-Decision-v1.0.",
-    "The first-pass review is frozen before secondary review; the freeze must not be rewritten to match later review conclusions.",
-    "PR #2 remains draft pending independent secondary review, reconciliation, and external commit-bound verification."
+    "The first-pass review remains frozen and was not disclosed to the independent secondary reviewer.",
+    "The independent review was retriggered for the exact frozen head without changing the source tree; PR #2 remains draft."
   ]
 }
