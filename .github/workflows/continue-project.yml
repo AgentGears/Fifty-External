@@ -2,6 +2,8 @@ name: Continue Fifty project
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
   push:
     branches: [main]
     paths:
