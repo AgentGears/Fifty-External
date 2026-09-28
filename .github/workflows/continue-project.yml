@@ -1,0 +1,99 @@
+name: Continue Fifty project
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'control/project-state.json'
+      - 'control/bin/publish-pass-receipt.sh'
+      - '.github/workflows/continue-project.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fifty-project-continuation
+  cancel-in-progress: false
+
+jobs:
+  publish-existing-pass:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out external boundary
+        env:
+          BOUNDARY_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git clone --depth=1 "https://x-access-token:${BOUNDARY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" boundary
+
+      - name: Read durable project state
+        id: state
+        run: |
+          set -euo pipefail
+          state_file="boundary/control/project-state.json"
+          test -f "$state_file"
+          receipt=$(jq -r '.external_verification.receipt // ""' "$state_file")
+          result=$(jq -r '.external_verification.result // ""' "$state_file")
+          commit_status=$(jq -r '.external_verification.commit_status // ""' "$state_file")
+          reviewed_head=$(jq -r '.current_lane.reviewed_head // ""' "$state_file")
+          test -n "$reviewed_head"
+          echo "receipt=$receipt" >> "$GITHUB_OUTPUT"
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+          echo "commit_status=$commit_status" >> "$GITHUB_OUTPUT"
+          echo "reviewed_head=$reviewed_head" >> "$GITHUB_OUTPUT"
+
+      - name: Stop when no publication is needed
+        if: steps.state.outputs.result != 'PASS' || steps.state.outputs.commit_status == 'SUCCESS'
+        run: |
+          echo "No pending PASS receipt requires status publication."
+
+      - name: Validate receipt path
+        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS'
+        run: |
+          set -euo pipefail
+          receipt="${{ steps.state.outputs.receipt }}"
+          head="${{ steps.state.outputs.reviewed_head }}"
+          test -n "$receipt"
+          case "$receipt" in
+            receipts/${head}/*) ;;
+            *) echo "receipt path is not bound to reviewed HEAD" >&2; exit 65 ;;
+          esac
+          test -f "boundary/$receipt"
+
+      - name: Publish existing verified PASS status
+        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS'
+        env:
+          FIFTY_STATUS_TOKEN: ${{ secrets.FIFTY_STATUS_TOKEN }}
+          TARGET_REPOSITORY: AgentGears/Fifty
+        run: |
+          set -euo pipefail
+          receipt="${{ steps.state.outputs.receipt }}"
+          receipt_commit=$(git -C boundary rev-parse HEAD)
+          target_url="https://github.com/${GITHUB_REPOSITORY}/blob/${receipt_commit}/${receipt}"
+          bash boundary/control/bin/publish-pass-receipt.sh \
+            --receipt "boundary/$receipt" \
+            --target-url "$target_url"
+
+      - name: Record status publication
+        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS'
+        env:
+          BOUNDARY_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd boundary
+          tmp=$(mktemp)
+          jq '
+            .external_verification.commit_status = "SUCCESS"
+            | .current_lane.state = "READY_TO_LEAVE_DRAFT"
+            | .blockers = ((.blockers // []) | map(select(.id != "BOOTSTRAP-STATUS-CREDENTIAL")))
+          ' control/project-state.json > "$tmp"
+          mv "$tmp" control/project-state.json
+          git config user.name "fifty-project-control"
+          git config user.email "fifty-project-control@users.noreply.github.com"
+          git add control/project-state.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Record external verification status publication"
+          git push origin HEAD:main
