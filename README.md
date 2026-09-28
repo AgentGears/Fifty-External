@@ -14,6 +14,10 @@ The current boundary verifies the reviewed G1 bootstrap revision:
 
 The workflow acquires the exact approved runtime archive, verifies its published SHA-256, checks out the exact Fifty commit, runs the fail-closed verifier, persists the terminal receipt in this repository, and then publishes a commit status back to the exact Fifty commit.
 
+## Current G1 evidence
+
+External verification run `36415558551` produced a PASS receipt for the exact target revision and persisted it under `receipts/6f39aa53e9bb863b6c8fb5c719806f055646de49/`. Status publication remains fail-closed until the cross-repository status credential is configured.
+
 ## Required secret
 
 The workflow requires repository secret `FIFTY_STATUS_TOKEN` to publish the cross-repository commit status. Use a fine-grained credential limited to `AgentGears/Fifty` with **Commit statuses: Read and write** (plus the platform-required repository metadata read permission). Do not grant source-write permission to Fifty for this credential.
