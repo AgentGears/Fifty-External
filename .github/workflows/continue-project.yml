@@ -61,8 +61,23 @@ jobs:
           esac
           test -f "boundary/$receipt"
 
-      - name: Publish existing verified PASS status
+      - name: Check status credential availability
+        id: credential
         if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS'
+        env:
+          FIFTY_STATUS_TOKEN: ${{ secrets.FIFTY_STATUS_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${FIFTY_STATUS_TOKEN:-}" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "Status credential is available."
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Waiting for FIFTY_STATUS_TOKEN; verified PASS evidence remains valid."
+          fi
+
+      - name: Publish existing verified PASS status
+        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS' && steps.credential.outputs.available == 'true'
         env:
           FIFTY_STATUS_TOKEN: ${{ secrets.FIFTY_STATUS_TOKEN }}
           TARGET_REPOSITORY: AgentGears/Fifty
@@ -76,7 +91,7 @@ jobs:
             --target-url "$target_url"
 
       - name: Record status publication
-        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS'
+        if: steps.state.outputs.result == 'PASS' && steps.state.outputs.commit_status != 'SUCCESS' && steps.credential.outputs.available == 'true'
         env:
           BOUNDARY_TOKEN: ${{ github.token }}
         run: |
