@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "updated_at_utc": "2026-09-28T12:45:00Z",
+  "project_repository": "AgentGears/Fifty",
+  "external_repository": "AgentGears/Fifty-External",
+  "current_gate": "G1",
+  "current_lane": {
+    "pull_request": 1,
+    "title": "G1: bootstrap kernel verification and canonical-store seams",
+    "branch": "g1/kernel-bootstrap",
+    "base_branch": "main",
+    "state": "DRAFT_BLOCKED_ON_STATUS_PUBLICATION",
+    "reviewed_head": "6f39aa53e9bb863b6c8fb5c719806f055646de49",
+    "reviewed_tree": "c0153105eeea5b55d890cc0a7e83bbb586ecd890"
+  },
+  "review": {
+    "first_pass": "PASS",
+    "secondary_review_a": "PASS_NO_MAJOR_ISSUES",
+    "secondary_review_b": "APPROVE_HIGH_CONFIDENCE",
+    "reconciliation": "PASS",
+    "unresolved_review_blockers": 0
+  },
+  "external_verification": {
+    "run_id": 36415558551,
+    "result": "PASS",
+    "receipt": "receipts/6f39aa53e9bb863b6c8fb5c719806f055646de49/run-36415558551-attempt-1.json",
+    "status_context": "fifty/external-verification",
+    "commit_status": "MISSING"
+  },
+  "blockers": [
+    {
+      "id": "BOOTSTRAP-STATUS-CREDENTIAL",
+      "class": "MANUAL_CREDENTIAL_SETUP",
+      "blocking": true,
+      "action": "Create repository secret FIFTY_STATUS_TOKEN in AgentGears/Fifty-External with a fine-grained credential limited to AgentGears/Fifty and Commit statuses: Read and write, plus required repository metadata read access.",
+      "reason": "The connected tools cannot create GitHub repository secrets. The verifier has already passed; only commit-bound status publication remains open."
+    }
+  ],
+  "next_actions": [
+    "After FIFTY_STATUS_TOKEN is configured, re-run the external verification workflow for the frozen reviewed HEAD.",
+    "Confirm fifty/external-verification=success on 6f39aa53e9bb863b6c8fb5c719806f055646de49.",
+    "Move PR #1 out of draft once the final gate is satisfied.",
+    "Merge PR #1 without changing the reviewed source tree.",
+    "Begin the next eligible G1 capability lane: CAP-101 Durable Workspace and Principal Identity, subject to the authoritative backlog and any still-required H1 decisions."
+  ],
+  "interruption_policy": "Interrupt only for Project Authority decisions, unavailable credential/account actions, irreversible consequential actions, semantic conflicts, non-mechanical verification failures, or unauthorized next-slice scope.",
+  "notes": [
+    "This file is operational continuity metadata, not product authority.",
+    "A source-tree change after the recorded reviewed HEAD invalidates source-dependent review/verification evidence and requires the affected stages to be repeated."
+  ]
+}
