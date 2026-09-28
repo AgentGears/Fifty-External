@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at_utc": "2026-09-28T13:25:00Z",
+  "updated_at_utc": "2026-09-28T20:27:00Z",
   "project_repository": "AgentGears/Fifty",
   "external_repository": "AgentGears/Fifty-External",
   "current_gate": "G1",
@@ -18,9 +18,11 @@
   "current_lane": {
     "capability": "CAP-101",
     "title": "Durable Workspace and Principal Identity",
-    "state": "BLOCKED_ON_H1_PROJECT_AUTHORITY",
-    "decision_proposal": "control/decisions/CAP-101-H1-Decision-Proposal-v0.1.md",
-    "branch": null,
+    "state": "IN_IMPLEMENTATION",
+    "decision": "control/decisions/CAP-101-H1-Decision-v1.0.md",
+    "decision_approval_commit": "f4faa703eeec7082f7d4ff07aa74a972c4a73639",
+    "branch": "g1/cap-101-workspace-principal",
+    "base_commit": "004644077a9178c9cbd9591f34115a81a7aa8898",
     "pull_request": null
   },
   "review": {
@@ -36,27 +38,18 @@
     "status_context": "fifty/external-verification",
     "commit_status": "NOT_STARTED"
   },
-  "blockers": [
-    {
-      "id": "CAP101-H1-AUTHORITY",
-      "class": "PROJECT_AUTHORITY_DECISION",
-      "blocking": true,
-      "action": "Project Authority must approve, modify, or reject control/decisions/CAP-101-H1-Decision-Proposal-v0.1.md before CAP-101 implementation begins.",
-      "reason": "The approved capability backlog requires affected H1 decisions before a production slice becomes implementation-authorized. CAP-101 creates the forcing function for persistence, authentication/recovery, runtime/harness continuity, and recovery semantics."
-    }
-  ],
+  "blockers": [],
   "next_actions": [
-    "Obtain one Project Authority decision on the CAP-101 H1 proposal.",
-    "If approved, record the approval transaction without changing its substantive decision text.",
-    "Create g1/cap-101-workspace-principal from current main.",
-    "Implement only CAP-101 Workspace/Principal durability, identity resolution, recovery, and required verification scenarios.",
-    "Run exhaustive first-pass review, freeze findings, perform independent secondary review, reconcile, then run external commit-bound verification.",
-    "Merge only after the exact reviewed HEAD receives fifty/external-verification=success."
+    "Implement only CAP-101 Workspace/Principal durability, identity resolution, recovery, and required verification scenarios on g1/cap-101-workspace-principal.",
+    "Open the CAP-101 pull request as draft when the implementation increment is coherent enough for review.",
+    "Run exhaustive first-pass review and freeze the reviewed HEAD/tree and findings.",
+    "Perform independent secondary review only after first-pass freeze, then reconcile.",
+    "Bind the external verifier to the exact reconciled reviewed HEAD/tree and require fifty/external-verification=success before merge."
   ],
   "interruption_policy": "Interrupt only for Project Authority decisions, unavailable credential/account actions, irreversible consequential actions, semantic conflicts, non-mechanical verification failures, or unauthorized next-slice scope.",
   "notes": [
     "This file is operational continuity metadata, not product authority.",
-    "PR #1 is merged and its exact reviewed HEAD carried a successful external verification status before merge.",
-    "CAP-101 implementation must not begin until its affected H1 decision package is approved."
+    "CAP-101 H1 v0.1 was explicitly approved by Project Authority and recorded as CAP-101-H1-Decision-v1.0.",
+    "PR #1 is merged and its exact reviewed HEAD carried a successful external verification status before merge."
   ]
 }
