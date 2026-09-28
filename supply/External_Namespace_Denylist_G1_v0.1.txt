@@ -1,0 +1,11 @@
+# External namespace denylist for G1 supply boundary
+# Case-sensitive literal tokens; this file stays outside the Fifty repository.
+PostgreSQL
+github.com/jackc/pgx
+github.com/coreos/go-oidc
+golang.org/x/oauth2
+go.dev
+pkg.go.dev
+go1.27.1
+pgx
+go-oidc
