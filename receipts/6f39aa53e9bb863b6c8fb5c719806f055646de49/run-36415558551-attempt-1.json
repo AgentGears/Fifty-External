@@ -1,0 +1,28 @@
+{
+  "contract_version": "1.5",
+  "status_context": "fifty/external-verification",
+  "result": "PASS",
+  "terminal_stage": "complete",
+  "verified_at_utc": "2026-09-28T11:26:00Z",
+  "target_commit_sha": "6f39aa53e9bb863b6c8fb5c719806f055646de49",
+  "observed_commit_sha": "6f39aa53e9bb863b6c8fb5c719806f055646de49",
+  "target_tree_sha": "c0153105eeea5b55d890cc0a7e83bbb586ecd890",
+  "observed_tree_sha": "c0153105eeea5b55d890cc0a7e83bbb586ecd890",
+  "runtime": "go version go1.27.1 linux/amd64",
+  "approved_supply_map_sha256": "f69369be68f079d0e0dcc367e4a8eb5c24626097414d1d909fe303cdc74a17ba",
+  "observed_supply_map_sha256": "f69369be68f079d0e0dcc367e4a8eb5c24626097414d1d909fe303cdc74a17ba",
+  "approved_denylist_sha256": "10f941528bd53e8dd0ff2465c8b038a85f15f3c87248a098bf8ebfedd81a65d8",
+  "observed_denylist_sha256": "10f941528bd53e8dd0ff2465c8b038a85f15f3c87248a098bf8ebfedd81a65d8",
+  "watchdog_seconds_per_check": 600,
+  "checks": {
+    "unit": {"result": "PASS", "output_sha256": "daf8f55e2676cbe37fdfd1261e40c78804bac872170b5bb46db8fab45914d21b"},
+    "race": {"result": "PASS", "output_sha256": "203b47aad129500820c25d77e422eabeeef0fe0a99f295155ddde498c7026907"},
+    "static": {"result": "PASS", "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "stress": {"result": "PASS", "output_sha256": "a81802d1bae355fecf4e0604710f542bc2e7fd4318bec0c727bc96c33ed4364e"},
+    "panic_legacy": {"result": "PASS", "output_sha256": "7bfe9fad95015868fb4a13813c517f0e091faf467451c862962b24c7c6338417"},
+    "panic_current": {"result": "PASS", "output_sha256": "09dbd3d46d3709f26a1a95e74510bb25546f804b82840bbf58d8a4fd83f09b2f"},
+    "terminology": {"result": "PASS", "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  },
+  "worktree_clean_before": true,
+  "worktree_clean_after": true
+}
