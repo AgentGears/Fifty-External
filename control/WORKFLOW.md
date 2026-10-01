@@ -1,65 +1,76 @@
-# Fifty Continuous Delivery Control
+# Fifty Solo-Developer Delivery Control
 
-This file defines the operational workflow used to advance Fifty without unnecessary pauses while preserving the project's semantic, review, and verification gates.
+This file defines the lightweight operational workflow for advancing Fifty as a single-developer project with AI assistance.
 
 ## Operating principle
 
-Keep one active implementation lane. Advance it continuously until a genuine authority boundary, credential boundary, semantic blocker, or failed verification requires intervention.
+Optimize for shipping correct product increments with minimal ceremony. Keep one active capability lane, preserve product semantics and trust boundaries, and stop only for a genuine product decision or a material engineering blocker.
 
-Routine repository operations, evidence collection, review reconciliation, status checks, branch/PR maintenance, and transition to the next already-authorized slice should not require repeated confirmation.
+Routine repository work, test execution, AI-assisted review, branch/PR maintenance, and transition to the next already-authorized slice do not require repeated confirmation.
 
-## Continuous execution loop
+## Delivery loop
 
-1. Select the next already-authorized capability slice or implementation increment.
-2. Create or continue one focused branch and pull request.
+1. Select the next already-authorized capability slice or coherent implementation increment.
+2. Create or continue a focused branch/PR when useful for visibility.
 3. Implement only the current slice; do not pre-build later optional scope.
-4. Run local/deterministic verification during implementation.
-5. Perform the exhaustive first-pass review and freeze its findings before independent secondary review.
-6. Resolve first-pass defects, then freeze the reviewed source HEAD.
-7. Invoke independent secondary review on that frozen HEAD; treat new findings as hypotheses and reconcile them against evidence.
-8. Run the external commit-bound verifier against the exact frozen HEAD/tree.
-9. Persist the external receipt and publish `fifty/external-verification` against that exact commit.
-10. When all required gates are satisfied, move the pull request out of draft and merge it.
-11. Re-read the authoritative capability backlog/roadmap, select the next eligible slice, and immediately begin the next lane.
+4. Run the relevant deterministic tests, race/static checks, and targeted fault tests for the changed behavior.
+5. Perform one focused AI-assisted review of the actual diff/source for correctness, security, failure modes, contract consistency, and missing tests.
+6. Fix material issues found and rerun the affected checks.
+7. Merge when the implementation is locally verified and no known material blocker remains.
+8. Update compact durable project state and immediately begin the next eligible lane.
 
-A source-tree change after review or external verification invalidates only the evidence that depended on the previous source tree. Re-run the minimum affected stages rather than restarting unrelated completed work.
+No universal external verifier, independent secondary reviewer, frozen-head evidence chain, reconciliation ceremony, or external status receipt is required.
+
+GitWire and similar services are optional advisory tools. Their availability, limits, or review state must not block project progress.
+
+## When extra rigor is justified
+
+Use additional review, measurements, or explicit decision records when a change materially affects one or more of:
+
+- product semantics or canonical domain ownership;
+- identity, authority, credentials, or trust boundaries;
+- irreversible or destructive data behavior;
+- persistence/recovery guarantees;
+- a major external dependency or runtime choice;
+- a known high-risk migration;
+- a real performance/resource question.
+
+The extra rigor should answer a concrete risk or product question, not exist as ceremony.
 
 ## Interruption policy
 
-The execution loop should stop and request human action only when one of the following is true:
+Stop and request human action only when one of the following is true:
 
 - an explicit Project Authority decision is required;
-- a secret, credential, permission, or account setting must be created through a surface unavailable to the connected tools;
+- a secret, credential, permission, or account action is unavailable to the connected tools and is genuinely needed for the product;
 - an irreversible or externally consequential action requires explicit authority;
-- authoritative project artifacts conflict and the conflict cannot be resolved without changing product semantics;
-- verification returns FAIL or INCONCLUSIVE and the next correction is not mechanically determined;
-- the next capability is not already authorized by the governing gate/backlog.
+- authoritative project semantics conflict and cannot be resolved mechanically;
+- tests or review reveal a material blocker whose correction is not mechanically determined;
+- the next capability is not already authorized.
 
-Everything else is treated as normal project execution and should continue without a confirmation round-trip.
+Everything else is normal project execution.
 
 ## Repository boundary
 
-`AgentGears/Fifty` remains the Fifty project namespace and contains only project-native implementation artifacts.
+`AgentGears/Fifty` is the Fifty product repository.
 
-`AgentGears/Fifty-External` is the operational/external boundary for provider-specific CI configuration, concrete external identities, supply mappings, verification machinery, receipts, and this execution-control state.
-
-Do not copy external identity or provider-specific operational material into the Fifty project namespace.
+`AgentGears/Fifty-External` holds operational control state, external/provider-specific notes where still useful, and development-process records. External machinery is not a required correctness authority for Fifty.
 
 ## Durable project state
 
-`control/project-state.json` is the compact rehydration record for continuing work across sessions. Update it whenever the active PR, reviewed HEAD, gate state, blocker, or next action changes.
+`control/project-state.json` is a compact rehydration record. Keep only what is useful to resume work: active capability, branch/PR if any, current implementation state, material blockers, and next action.
 
-The state record is operational metadata. It is not product authority and cannot supersede the Product Constitution, approved decision records, Canonical Domain Model, capability backlog, or verification evidence.
+The state record is operational metadata. Product authority remains in explicit Project Authority decisions and the applicable Fifty product/domain artifacts.
 
 ## Communication cadence
 
-Report at meaningful milestones rather than after every mechanical step:
+Report only meaningful milestones:
 
-- blocker requiring human action;
-- review/reconciliation complete;
-- external verification PASS/FAIL;
+- material blocker requiring human action;
+- capability implementation complete;
+- material review/test issue found or resolved;
 - merge completed;
 - next capability lane started;
 - gate or phase closed.
 
-This keeps the project observable without turning routine execution into an approval queue.
+Avoid turning routine development into an approval queue.
